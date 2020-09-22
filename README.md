@@ -17,3 +17,6 @@ Competitive analyze: traveloka, pegipegi, tiket for finding pros and cons to imp
 > Express JS
 > React JS
 > Node JS
+
+# UX Things
+> Flowmapp (user persona)
