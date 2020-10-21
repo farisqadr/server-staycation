@@ -1,5 +1,7 @@
 const Category = require('../models/Category')
 const Bank = require('../models/Bank')
+const fs = require('fs-extra')
+const path = require('path')
 
 
 module.exports = {
@@ -34,7 +36,7 @@ module.exports = {
 			req.flash('alertStatus', 'success')
 			res.redirect('/admin/category')
 		} catch (error) {
-			req.flash('alertMessage', '${error.message}')
+			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
 			res.redirect('/admin/category')
 		}
@@ -50,7 +52,7 @@ module.exports = {
 			req.flash('alertStatus', 'success')
 			res.redirect('/admin/category')
 		} catch (error) {
-			req.flash('alertMessage', '${error.message}')
+			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
 			res.redirect('/admin/category')
 		}
@@ -66,7 +68,7 @@ module.exports = {
 			res.redirect('/admin/category')
 		}
 		catch (error) {
-			req.flash('alertMessage', '${error.message}')
+			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
 			res.redirect('/admin/category')
 		}
@@ -85,7 +87,7 @@ module.exports = {
 			})
 
 		} catch (error) {
-			req.flash('alertMessage', '${error.message}')
+			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
 			res.redirect('/admin/bank')
 		}
@@ -104,12 +106,58 @@ module.exports = {
 			req.flash('alertStatus', 'success')
 			res.redirect('/admin/bank')
 		} catch (error) {
-			req.flash('alertMessage', '${error.message}')
+			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
 			res.redirect('/admin/bank')
 		}
 	},
 
+	editBank: async (req, res) => {
+		try {
+			const { id, accountName, bankName, accountNumber } = req.body
+			const bank = await Bank.findOne({ _id: id })
+			if (req.file == undefined ) {
+				bank.accountName = accountName
+				bank.bankName = bankName
+				bank.accountNumber = accountNumber
+				await bank.save()
+				req.flash('alertMessage', 'Success Update Bank!')
+				req.flash('alertStatus', 'success')
+				res.redirect('/admin/bank')
+			}else {
+				await fs.unlink(path.join(`public/${bank.imageUrl}`))
+				bank.accountName = accountName
+				bank.bankName = bankName
+				bank.accountNumber = accountNumber
+				bank.imageUrl = `images/${req.file.filename}`
+				await bank.save()
+				req.flash('alertMessage', 'Success Update Bank!')
+				req.flash('alertStatus', 'success')
+				res.redirect('/admin/bank')
+			}
+		} catch (error) {
+			req.flash('alertMessage', `${error.message}`)
+			req.flash('alertStatus', 'danger')
+			res.redirect('/admin/bank')
+		}
+
+	},
+
+	deleteBank: async (req, res) => {
+		try {
+			const { id } = req.params
+			const bank = await Bank.findOne({ _id: id})
+			await fs.unlink(path.join(`public/${bank.imageUrl}`))
+			await bank.remove()
+			req.flash('alertMessage', 'Success Delete Bank!')
+			req.flash('alertStatus', 'success')
+			res.redirect('/admin/bank')
+		} catch (error) {
+			req.flash('alertMessage', `${error.message}`)
+			req.flash('alertStatus', 'danger')
+			res.redirect('/admin/bank')			
+		}
+	},
 
 	viewItem: (req, res) => {
 		res.render('admin/item/view_item', {
