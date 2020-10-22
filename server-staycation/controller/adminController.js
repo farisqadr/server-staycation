@@ -174,7 +174,8 @@ module.exports = {
 				title: "Staycation | Items",
 				category,
 				alert,
-				item
+				item,
+				action: 'view'
 			})
 			
 		} catch (error) {
@@ -208,6 +209,29 @@ module.exports = {
 			req.flash('alertMessage', 'Success Add Item!')
 			req.flash('alertStatus', 'success')
 			res.redirect('/admin/item')
+		} catch (error) {
+			req.flash('alertMessage', `${error.message}`)
+			req.flash('alertStatus', 'danger')
+			res.redirect('/admin/item')
+		}
+	},
+
+	showImageItem: async (req, res) => {
+		try {
+			const { id } = req.params
+			const item = await Item.findOne({ _id: id})
+				.populate({ path: 'imageId', select: 'id imageUrl'})
+
+			//const category = await Category.find()
+			const alertMessage = req.flash('alertMessage')
+			const alertStatus = req.flash('alertStatus')
+			const alert = { message: alertMessage, status: alertStatus }
+			res.render('admin/item/view_item', {
+				title: "Staycation | Show Image Item",
+				alert,
+				item,
+				action: 'show image'
+			})
 		} catch (error) {
 			req.flash('alertMessage', `${error.message}`)
 			req.flash('alertStatus', 'danger')
