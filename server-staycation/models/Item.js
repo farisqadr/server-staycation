@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { ObjectId } = mongoose.Schema
 
 const itemSchema = new mongoose.Schema({
     title: {
@@ -25,11 +26,14 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    unit: {
+        type: String,
+        default: 'night'
+    },
     categoryId: {
         type: ObjectId,
         ref: 'Category'
     },
-
     imageId: [{
         type: ObjectId,
         ref: 'Image'
@@ -44,4 +48,4 @@ const itemSchema = new mongoose.Schema({
     }]
 })
 
-module.exports = mongoose.model('Category', itemSchema)
+module.exports = mongoose.model('Item', itemSchema)

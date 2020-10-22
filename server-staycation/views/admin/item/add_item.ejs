@@ -18,7 +18,9 @@
                     <label for="name">Category</label>
                     <select class="form-control" name="categoryId">
                         <option value="">--- Category ----</option>
-                        <option value="">--- Ambil dari db ----</option>
+                        <% for(let i = 0; i < category.length; i++) { %>
+                            <option value="<%= category[i].id %>">--- Ambil dari db ----</option>
+                        <% } %>
                     </select>
                 </div>
                 <div class="form-group">
