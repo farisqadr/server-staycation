@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const adminController = require('../controller/adminController')
-const { upload } = require('../middleware/multer')
+const { uploadSingle, uploadMultiple } = require('../middleware/multer')
 
 router.get('/dashboard', adminController.viewDashboard)
 // endpoint category
@@ -10,11 +10,13 @@ router.put('/category', adminController.editCategory)
 router.delete('/category/:id', adminController.deleteCategory)
 // endpoint bank
 router.get('/bank', adminController.viewBank)
-router.post('/bank', upload, adminController.addBank)
-router.put('/bank', upload, adminController.editBank)
+router.post('/bank', uploadSingle, adminController.addBank)
+router.put('/bank', uploadSingle, adminController.editBank)
 router.delete('/bank/:id', adminController.deleteBank)
-
+// endpoint item
 router.get('/item', adminController.viewItem)
+router.post('/item', uploadMultiple, adminController.addItem)
+
 router.get('/booking', adminController.viewBooking)
 
 module.exports = router

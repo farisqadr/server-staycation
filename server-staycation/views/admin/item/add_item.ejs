@@ -19,7 +19,7 @@
                     <select class="form-control" name="categoryId">
                         <option value="">--- Category ----</option>
                         <% for(let i = 0; i < category.length; i++) { %>
-                            <option value="<%= category[i].id %>">--- Ambil dari db ----</option>
+                            <option value="<%= category[i].id %>"><%= category[i].name %></option>
                         <% } %>
                     </select>
                 </div>
