@@ -16,10 +16,15 @@ module.exports = {
 			const alertMessage = req.flash('alertMessage')
 			const alertStatus = req.flash('alertStatus')
 			const alert = { message: alertMessage, status: alertStatus }
-			res.render('index', {
-				alert,
-				title: "Staycation | Sign In"
-			})
+			if (req.session.user == null || req.session.user == undefined) {
+				res.render('index', {
+					alert,
+					title: "Staycation | Sign In"
+				})
+			} else {
+				res.redirect('/admin/dashboard')
+			}
+
 		}
 		catch (error) {
 			res.render('admin/signin')
@@ -41,16 +46,32 @@ module.exports = {
 				req.flash('alertStatus', 'danger')
 				res.redirect('/admin/signin')
 			}
+			req.session.user = {
+				id: user.id,
+				username: user.username
+			}
 			res.redirect('/admin/dashboard')
 		} catch (error) {
 			res.redirect('/admin/signin')
 		}
 	},
 
+	actionLogout: async (req, res) => {
+		req.session.destroy()
+		res.redirect('/admin/signin')
+	},
+
 	viewDashboard: (req, res) => {
-		res.render('admin/dashboard/view_dashboard', {
-			title: "Staycation | Dashboard"
-		})
+		try {
+
+			res.render('admin/dashboard/view_dashboard', {
+				title: "Staycation | Dashboard",
+				user: req.session.user
+			})
+		} catch (error) {
+
+		}
+
 	},
 
 	viewCategory: async (req, res) => {
@@ -62,7 +83,8 @@ module.exports = {
 			res.render('admin/category/view_category', {
 				category,
 				alert,
-				title: "Staycation | Category"
+				title: "Staycation | Category",
+				user: req.session.user
 			})
 		}
 		catch (error) {
@@ -125,7 +147,8 @@ module.exports = {
 			res.render('admin/bank/view_bank', {
 				alert,
 				title: "Staycation | Bank",
-				bank
+				bank,
+				user: req.session.user
 			})
 
 		} catch (error) {
@@ -215,7 +238,8 @@ module.exports = {
 				category,
 				alert,
 				item,
-				action: 'view'
+				action: 'view',
+				user: req.session.user
 			})
 
 		} catch (error) {
@@ -382,7 +406,8 @@ module.exports = {
 				alert,
 				itemId,
 				feature,
-				activity
+				activity,
+				user: req.session.user
 			})
 		} catch (error) {
 			req.flash('alertMessage', `${error.message}`)
@@ -557,7 +582,8 @@ module.exports = {
 
 	viewBooking: (req, res) => {
 		res.render('admin/booking/view_booking', {
-			title: "Staycation | Booking"
+			title: "Staycation | Booking",
+			user: req.session.user
 		})
 	}
 }
