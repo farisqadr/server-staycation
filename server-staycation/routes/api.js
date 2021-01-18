@@ -3,4 +3,5 @@ const apiController = require('../controller/apiController')
 //const { upload } = require('../middleware/multer')
 
 router.get('/landing-page', apiController.landingPage)
+router.get('/detail-page/:id', apiController.detailPage)
 module.exports = router
