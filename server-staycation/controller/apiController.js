@@ -2,6 +2,7 @@ const Item = require('../models/Item')
 const Treasure = require('../models/Activity')
 const Traveler = require('../models/Booking')
 const Category = require('../models/Category')
+const Bank = require('../models/Bank')
 
 module.exports = {
     landingPage: async (req, res) => {
@@ -69,10 +70,11 @@ module.exports = {
             req.status(500).json({ message: "Internal server error" })
         }
     },
+
     detailPage: async (req, res) => {
         try {
             const { id } = req.params
-            const item = await Items.findOne({ _id: id })
+            const item = await Item.findOne({ _id: id })
                 .populate({ path: 'featureId', select: '_id name qty imageUrl' })
                 .populate({ path: 'activityId', select: '_id name type imageUrl' })
                 .populate({ path: 'imageId', select: '_id imageUrl' })
@@ -96,7 +98,41 @@ module.exports = {
             })
 
         } catch (error) {
-
+            res.status(500).json({ message: "Internal Server Error" })
         }
+    },
+
+    bookingPage: async (req, res) => {
+        const {
+            idItem,
+            duration,
+            price,
+            bookingDateStart,
+            bookingDateEnd,
+            firstName,
+            lastName,
+            emailAddress,
+            phoneNumber,
+            accountHolder,
+            bankFrom
+        } = req.body
+        if (!req.file) {
+            return res.status(404).json({ message: "Image Not Found" })
+        }
+        if (
+            idItem === "" ||
+            duration === "" ||
+            price === "" ||
+            bookingDateStart === "" ||
+            bookingDateEnd === "" ||
+            firstName === "" ||
+            lastName === "" ||
+            emailAddress === "" ||
+            phoneNumber === "" ||
+            accountHolder === "" ||
+            bankFrom === "") {
+            res.status(404).json({ message: "Lengkapi semua field" })
+        }
+        res.status(201).json({ message: "Success Booking" })
     }
 }
