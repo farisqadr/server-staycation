@@ -321,6 +321,7 @@ module.exports = {
 			const alert = { message: alertMessage, status: alertStatus }
 			res.render('admin/item/view_item', {
 				title: "Staycation | Edit Item",
+				user: req.session.user,
 				alert,
 				item,
 				category,
