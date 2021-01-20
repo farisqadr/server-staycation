@@ -297,6 +297,7 @@ module.exports = {
 			const alert = { message: alertMessage, status: alertStatus }
 			res.render('admin/item/view_item', {
 				title: "Staycation | Show Image Item",
+				user: req.session.user,
 				alert,
 				item,
 				action: 'show image'
@@ -410,11 +411,11 @@ module.exports = {
 
 			res.render('admin/item/detail_item/view_detail_item', {
 				title: "Staycation | Detail Item",
+				user: req.session.user,
 				alert,
 				itemId,
 				feature,
-				activity,
-				user: req.session.user
+				activity
 			})
 		} catch (error) {
 			req.flash('alertMessage', `${error.message}`)
