@@ -83,7 +83,7 @@ module.exports = {
 
             const bank = await Bank.find()
 
-            const testimonials = {
+            const testimonial = {
                 _id: "asd1293uasdads1",
                 imageUrl: "images/testimonial2.jpg",
                 name: "Happy Family",
@@ -96,7 +96,7 @@ module.exports = {
             res.status(200).json({
                 ...item._doc,
                 bank,
-                testimonials
+                testimonial
             })
 
         } catch (error) {
@@ -108,7 +108,6 @@ module.exports = {
         const {
             idItem,
             duration,
-            // price,
             bookingStartDate,
             bookingEndDate,
             firstName,
